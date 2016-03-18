@@ -1,0 +1,6 @@
+comandos
+- PULL:Bajar repositorios 
+- Merge 
+-checkout 
+- PUSH: Montar cambios
+git@github.com:guerrerojosedario/bogobandapp.gitgit
