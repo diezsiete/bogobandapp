@@ -32,6 +32,29 @@ class Bd {
 			 self::$conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 		}
 	}
+
+	/**
+	 * TODO : no sirve si se manda un array de valores asociativa, lo cual no debería generar problema
+	 * @param string $table
+	 * @param array $fields
+	 * @param array $values : puede ser vector para una sola insercion o array multidimensional para varias filas
+	 * @return multitype:string multitype:NULL
+	 */
+	private static function insertPrepare($table, $fields, $values){
+		!is_array(array_values($values)[0]) ? $values = [$values] : NULL;
+
+		$sql = "INSERT INTO ".$table." (".(implode(", ", $fields)).") VALUES ";
+		$values_count = count($values);
+		$values_final = [];
+		for($i = 0; $i < $values_count; $i++){
+			$sql .= "(:".implode("{$i}, :", $fields)."{$i})".($i+1 < $values_count ? ", " : NULL);
+			for($j = 0; $j < count($fields); $j++){
+				$values_final[$fields[$j].$i] = $values[$i][$j];
+			}
+		}
+
+		return ["sql" => $sql, "values" => $values_final];
+	}
 	
 	public static function execute($prepared_sql, $values = []){
 	    self::init();
@@ -86,6 +109,38 @@ class Bd {
 	
 	    return static::execute($sql, $real_values);
 	}
+
+    public static function insert($table, $fields, $values){
+        self::init();
+
+        $prepared = static::insertPrepare($table, $fields, $values);
+
+        return static::execute($prepared["sql"], $prepared["values"]);
+    }
+
+    public static function update($table, $fields, $condition){
+        self::init();
+
+        $sql = "UPDATE {$table} SET ";
+        $fields_final = [];
+        $fields_count = count($fields);
+        $i = 0;
+        foreach($fields as $field_name => $value){
+            $sql .= $field_name." = :{$field_name} " . ($i+1 < $fields_count ? ", " : "" );
+            $fields_final[":".$field_name] = $value;
+            $i++;
+        }
+        $sql .= " WHERE ";
+        $i = 0;
+        $condition_count = count($condition);
+        foreach($condition as $field => $value){
+            $sql .= $field . " = :c" . $field . ($i+1 < $condition_count ? " AND " : "");
+            $fields_final[":c".$field] = $value;
+            $i++;
+        }
+
+        return static::execute($sql, $fields_final);
+    }
 	
 	public static function selectAll($table, $filter = NULL){
 	    return self::select($table, "*", $filter);

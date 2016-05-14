@@ -3,7 +3,7 @@ body{
 }
 
 /** -- NAVBAR --------------- **/
-/** right menu **/
+/** left menu **/
 .navbar-default .container{
 	margin-left:0px;
 	margin-right: 0px;	
@@ -48,16 +48,29 @@ body{
 	border-top: 0.25rem solid #FFF;
 }
 
-.navbar-default .nav li a:hover, .navbar-default .nav li.selected a {
+.navbar-default .nav li a:hover, .navbar-default .nav li.selected a,
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover
+{
 	border-top: 0.25rem solid #122A95;
+    background-color: #e7e7e7;
 }
-/** left menu **/
+
+.navbar-default .nav li ul li a:hover, .navbar-default .nav li.selected ul li a {
+    border-top: 0.25rem solid #FFF;
+}
+/** right menu **/
 #nav-user{
 	float:right;
 }
 #nav-user a{	
 	color: #122A95;
 }
+.dropdown-menu{
+    left:auto;
+    right:0;
+}
+
+/** -- SEARCH BAR --------------- **/
 /** search **/
 .container.search{
 	margin-top:50px;
