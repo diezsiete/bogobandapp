@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BogoBandApp</title>
+
+    <!-- Vendor CSS -->
+    <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<link href="vendor/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
+	
+    <!-- Custom CSS -->
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+	<!-- Vendor Js -->
+	<script src="vendor/modernizr/modernizr.js"></script>
+	
+	<!-- Objetos -->
+	<script src="js/Ajax.js"></script>
+	<script src="js/App.js"></script>
+    <script src="js/Evento.js"></script>
+    <script src="js/Clasificado.js"></script>
+    <script src="js/Bar.js"></script>
+    <script src="js/SalaEnsayo.js"></script>
+    <script src="js/Filtros.js"></script>
+    <script src="js/FiltroAcordeon.js"></script>
+    <script src="js/config.js"></script>
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-shrink" >
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Bogo<b>BandApp</b></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li id="navbar-evento" >
+                        <a class="page-scroll" href="#services">Eventos</a>
+                    </li>
+                    <li id="navbar-clasificado">
+                        <a class="page-scroll" href="#portfolio">Clasificados</a>
+                    </li>
+                    <li id="navbar-bar">
+                        <a class="page-scroll" href="#about">Bares</a>
+                    </li>
+                    <li id="navbar-salaEnsayo">
+                        <a class="page-scroll" href="#team">Ensayos</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="nav-user" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="page-scroll" href="#services">
+                        	<i class="fa fa-comments"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">
+                        	<i class="fa fa-user"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+        
+    </nav>
+    <div id="wrapper">
+    <div class="container search">
+	 	<form id="filtro" method="get">
+		  	
+		  	<div class="search-phrase-container">
+		  		<input autocomplete="off" class="phrase" id="ftexto" name="phrase" type="text" value="">
+		  	</div>
+		  	<button id="search-form-button" type="submit">
+		  		<i class="fa fa-search"></i>
+		  	</button>
+		  	<div class="mostrar-filtros-panel hidden">
+		  		<a href="#">
+		  			Filtrar
+		  		</a>
+		  		<a href="#" class="angle fa fa-angle-down fa-4">
+		  			
+		  		</a>
+		  	</div>
+	 	</form>
+    </div>
+    <div id="filtros-contenedor" class="hidden">
+    	<form id="filtros-form" >
+    		<fieldset id="filtro-localidad" class="acordeon">
+    			<header>Localidad</header>
+    			<div class="option-wrap hidden"></div>
+    		</fieldset>
+    		<fieldset id="filtro-genero-musical" class="acordeon">
+    			<header>Genero musical</header>
+    			<div class="option-wrap hidden"></div>
+    		</fieldset>
+    		<fieldset id="filtro-evento-tipo" class="acordeon">
+    			<header>Tipo</header>
+    			<div class="option-wrap hidden"></div>
+    		</fieldset>
+    		<!-- 
+    		<fieldset id="filtro-fecha">
+    			<header>Fecha</header>
+    		</fieldset>
+    		-->
+    		<fieldset id="filtro-categoria-clasificado" class="acordeon">
+    			<header>Categoría</header>
+    			<div class="option-wrap hidden"></div>
+    		</fieldset>
+    		<fieldset id="filtro-instrumento" class="acordeon">
+    			<header>Instrumento</header>
+    			<div class="option-wrap hidden"></div>
+    		</fieldset>
+    		
+    	</form>
+    </div>
+	<div id="pagina-contenedor">
+	    <!-- Eventos Seccion -->
+	    <section id="eventos" class="bg-light-gray">
+	        <div class="container">
+	            <div>
+	                <div class="col-lg-12 text-center titulo-principal">
+	                    <h2 class="section-heading">Eventos</h2>
+	                    <!-- <h3 class="section-subheading text-muted"></h3>  -->
+	                </div>
+	            </div>
+	            <div class="row row-eventos">
+	            	<div class="col-md-4 col-sm-6 evento-item evento hidden">
+	                    <a href="#eventoModal1" class="evento-link" data-toggle="modal">
+	                        <div class="evento-hover">
+	                            <div class="event-hover-content">
+	                                <i class="fa fa-eye fa-3x"></i>
+	                            </div>
+	                        </div>
+	                        <img src="" class="img-responsive" alt="">
+	                        <div class="evento-thumb-title-wrap">
+	                        	<h4>La peluca del musico</h4>
+	                        	<p class="usuario subinfo">De : <span></span></p>
+	                        	<p class="localidad subinfo">Localidad : <span></span></p>
+	                        	<p class="genero_musical subinfo">Generos : <span></span></p>
+	                        	<p class="evento_tipo subinfo">Tipo : <span></span></p>
+	                        </div>
+	                    </a>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    
+	    
+	    <!-- Clasificados Seccion -->
+	    <section id="clasificados" class="bg-light-gray">
+	        <div class="container">
+	            <div>
+	                <div class="col-lg-12 text-center titulo-principal">
+	                    <h2 class="section-heading">Clasificados</h2>
+	                    <!-- <h3 class="section-subheading text-muted"></h3>  -->
+	                </div>
+	            </div>
+	            <div class="row row-clasificados">
+	            
+		            <div class="clasificado-item hidden">
+		            	<header class="categoria"></header>
+		            	<a href="#">
+		            		<div class="info">
+		            			<p>
+		            				<span class="titulo"><strong></strong></span>
+		            			</p>
+		            			<p class="descripcion">
+		            				
+		            			</p>
+		            			<p class="instrumento">
+		            				<span class="nombre"></span>
+		            				<span class="nivel"></span>
+		            			</p>
+		            		</div>
+		            		<div class="usuario">
+		            			<header class="nombre"></header>
+		            			<p class="fecha"></p>
+		            		</div>
+		            	</a>
+		            	
+		            	<div class="accion-links">
+		            		<div class="aplicar-link">
+		            			<a href="#" class="aplicar">Aplicar</a>
+		            		</div>
+		            		<a href="#" class="contactar">Contactar</a>
+		            	</div>
+		            </div>    
+	            </div>
+	        </div>
+	    </section>
+	    
+		<!-- Bares Seccion -->
+	    <section id="bares" class="bg-light-gray">
+	        <div class="container">
+	            <div>
+	                <div class="col-lg-12 text-center titulo-principal">
+	                    <h2 class="section-heading">Bares</h2>
+	                    <!-- <h3 class="section-subheading text-muted"></h3>  -->
+	                </div>
+	            </div>
+	            <div class="row row-bares">
+	            	<div class="col-md-4 col-sm-6 bar-item hidden">
+	            		<a href="#" class="bar-link">
+		            		 <img class="img-responsive" src="" />
+		            		 <div class="item-title">
+		                     	<h4>Bar b</h4>
+		                     	<p class="localidad subinfo">Localidad : <span></span></p>
+	                        	<p class="genero_musical subinfo">Generos : <span></span></p>
+		                     </div>
+	                     </a>
+	            	</div>
+	            </div>
+	        </div>
+	    </section>
+	    
+	    <!-- Ensayo Seccion -->
+	    <section id="ensayos" class="bg-light-gray">
+	        <div class="container">
+	            <div>
+	                <div class="col-lg-12 text-center titulo-principal">
+	                    <h2 class="section-heading">Salas de ensayo</h2>
+	                    <!-- <h3 class="section-subheading text-muted"></h3>  -->
+	                </div>
+	            </div>
+	            <div class="row row-ensayos">
+	            	<div class="col-md-4 col-sm-6 ensayo-item hidden">
+	            		<a href="#" class="ensayo-link">
+		            		<img class="img-responsive" src="" />
+		            		<div class="item-title">
+		                     	<h4></h4>
+		                     	<p class="localidad subinfo">Localidad : <span></span></p>
+		                    </div>
+	                     </a>
+	            	</div>
+	            </div>
+	        </div>
+	    </section>
+    </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 copyright">
+                    <span class="copyright">BogoBandApp&copy; 2016</span>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks">
+                        <li><a href="#">Privacy Policy</a>
+                        </li>
+                        <li><a href="#">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/bootstrap.min.js"></script>
+
+    
+
+
+    <!-- Custom JavaScript -->
+    <script>
+    	var ajax = new Ajax(ajax_file);
+    	$(function(){
+    		App.init();
+    	});
+    </script>
+
+</body>
+
+</html>
