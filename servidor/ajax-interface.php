@@ -10,14 +10,14 @@ spl_autoload_register(function ($class) {
     file_exists($path) ? include $path : NULL;
 });
 
-if(isset($_GET['solicitud'])){	
+if(isset($_GET['solicitud'])){
 	echo "respuesta{$_GET['solicitud_cuenta']}(" . json_encode($_GET['solicitud']()) . ");";
 }
 
 function getEventos(){
     $eventos = Evento::instancia($_GET);
     $retorno = new stdClass();
-  
+
     foreach($eventos as $index => $evento)
         $retorno->$index = $evento->aArreglo();
     return $retorno;
@@ -43,7 +43,7 @@ function getBares(){
 function getSalaEnsayos(){
     $ensayos = SalaEnsayo::instancia($_GET);
     $retorno = new stdClass();
-    
+
     foreach($ensayos as $index => $ensayo)
         $retorno->$index = $ensayo->aArreglo();
     return $retorno;
@@ -79,3 +79,7 @@ function getCategoriaClasificado(){
 function getInstrumento(){
     return Util::getInstrumento();
 }
+
+echo "Estamos antes de instertar";
+Usuario::quemarInsertar();
+echo "Estamos después de instertar";

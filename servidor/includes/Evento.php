@@ -2,6 +2,16 @@
 class Evento {
     private $atributos = [];
     private $generoMusical = [];
+
+    public static function agregarEvento( $campos)
+    {
+        $tabla = "evento";
+        $columnas = ["nombre","descripcion", "precio","fecha","imagen", "idLocalidad","genero_musical","idEntidad_comercial"];
+
+        bd::insert($tabla, $columnas, $campos );
+        return ;
+    }
+
     public static function instancia($filtro = null){
         $consulta = "SELECT e.id, e.nombre, e.descripcion, l.nombre localidad, e.usuario_id, u.nombre usuario, et.nombre evento_tipo, e.precio, e.fecha,
                      gm.nombre genero_musical, e.imagen
@@ -17,19 +27,19 @@ class Evento {
                              LEFT JOIN sala_ensayo se ON u.id = se.usuario_id
                              WHERE b.nombre IS NOT NULL OR se.nombre IS NOT NULL
                      )u ON e.usuario_id = u.id ";
-        
+
         $valores_filtro = [];
-        
+
         $where = false;
-        
+
         if(isset($filtro['texto']) && !empty($filtro['texto'])){
             $where = true;
             $texto = $filtro['texto'];
-            
+
             $consulta .= "WHERE e.nombre LIKE '%{$texto}%' OR e.descripcion LIKE '%{$texto}%'
                           OR l.nombre LIKE '%{$texto}%' OR u.nombre LIKE '%{$texto}%'
                           OR et.nombre LIKE '%{$texto}%' OR gm.nombre LIKE '%{$texto}%'";
-            
+
         }
         if(isset($filtro['localidad'])){
             if(!$where){
@@ -57,33 +67,33 @@ class Evento {
             }
             $consulta .= "et.id IN ( " . implode(", ", $filtro['eventoTipo']) . ") ";
         }
-        
-        
+
+
         $pdoStatement = Bd::execute($consulta, $valores_filtro);
-        
+
         $eventos = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $genero_musical = [];
         $eventos_objs = [];
         foreach($eventos as $indice => $evento){
             $genero_musical[] = $evento['genero_musical'];
             if(isset($eventos[$indice+1]) && $eventos[$indice+1]['id'] == $evento['id'])
                 continue;
-           
+
             $eventos_objs[] = new static($evento, $genero_musical);
             $genero_musical = [];
         }
-        
+
         return $eventos_objs;
     }
-    
+
     protected function __construct($atributos, $genero_musical){
         foreach($atributos as $nombre => $valor){
             $this->atributos[$nombre] = $valor;
         }
         $this->generoMusical = $genero_musical;
     }
-    
+
     public function __get($attr) {
         $valor = $this->atributos[$attr];
         if($attr == 'imagen'){
@@ -92,7 +102,7 @@ class Evento {
 
         return $valor;
     }
-    
+
     public function aArreglo(){
         $a = [];
         foreach($this->atributos as $nombre => $valor){

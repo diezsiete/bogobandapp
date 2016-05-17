@@ -1,11 +1,20 @@
 <?php
 class Clasificado {
-    
+
     private $atributos = [];
     private $generoMusical = [];
-    
+
+    public static function agregarClasificado( $campos )
+    {
+        $tabla = "clasificado";
+        $columnas = ["titulo","categoria", "descripcion","instrumento","nivel"];
+        bd::insert($tabla, $columnas, $campos );
+
+        return ;
+    }
+
     public static function instancia($filtro = null){
-        $consulta = "SELECT c.id, cc.nombre categoria, c.titulo, c.descripcion, i.nombre as instrumento, 
+        $consulta = "SELECT c.id, cc.nombre categoria, c.titulo, c.descripcion, i.nombre as instrumento,
                             inv.nombre as instrumento_nivel, u.nombre usuario, gm.nombre as genero_musical
                      FROM clasificado c
                      LEFT JOIN instrumento i ON c.instrumento_id = i.id
@@ -20,8 +29,8 @@ class Clasificado {
                         LEFT JOIN musico m ON u.id = m.usuario_id
                         WHERE b.nombre IS NOT NULL OR m.nombre IS NOT NULL
                      )u ON c.usuario_id = u.id ";
-        $valores_filtro = [];    
-        
+        $valores_filtro = [];
+
         $where = false;
         if(isset($filtro['texto']) && !empty($filtro['texto'])){
             $where = true;
@@ -57,10 +66,10 @@ class Clasificado {
             }
             $consulta .= "i.id IN ('".implode("', '", $filtro['instrumento'])."') ";
         }
-        
-  
+
+
         $pdoStatement = Bd::execute($consulta, $valores_filtro);
-        
+
         $clasificados = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
         $genero_musical = [];
         $clasificados_objs = [];
@@ -73,24 +82,24 @@ class Clasificado {
         }
         return $clasificados_objs;
     }
-    
-    
+
+
     protected function __construct($atributos, $genero_musical){
         foreach($atributos as $nombre => $valor){
             $this->atributos[$nombre] = $valor;
         }
         $this->generoMusical = $genero_musical;
     }
-    
+
     public function __get($attr) {
         $valor = $this->atributos[$attr];
         if($attr == 'imagen'){
             $valor = Util::config("base_img_clasificado") . $valor;
         }
-        
+
         return $valor;
     }
-    
+
     public function aArreglo(){
         $a = [];
         foreach($this->atributos as $nombre => $valor){

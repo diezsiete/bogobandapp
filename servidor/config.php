@@ -1,9 +1,9 @@
 <?php
 $GLOBALS["config"] = array(
-		"bd"     => "louielou_bogobandapp",
-		"bd_usuario" => "louielou_bba",
+		"bd"     => "bba",
+		"bd_usuario" => "root",
 		"bd_clave" => "",
-        
+
         "base_img" => 'http://espaciokb.co/server/img/'
 );
 
