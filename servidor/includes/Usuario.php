@@ -150,6 +150,13 @@ class Usuario {
         bd::delete($usuario, $array);
     }
 
+    public static function quemarconsulta(){
+        //$ensayos_objs =
+        SalaEnsayo::instancia();
+    //    echo "xxx" .$ensayos_objs;
+
+    }
+
 }
 
 ?>

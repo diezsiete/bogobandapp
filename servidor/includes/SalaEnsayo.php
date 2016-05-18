@@ -3,15 +3,61 @@ class SalaEnsayo {
 
     private $atributos = [];
 
-    public static function instancia($filtro = null){
-        $consulta = "SELECT se.usuario_id id, se.nombre, l.nombre localidad, se.precios, se.imagen
-                     FROM sala_ensayo se
-                     JOIN localidad l ON se.localidad_id = l.id ";
+    public static function agregarSala($campos, $idSala_Ensayo){
+          $campos["idSala_Ensayo"] = $idSala;
+          $tabla = "sala";
+          $columnas = [ "precio", "grabacion", "idSala_Ensayo" ] ;
+          bd::insert($tabla, $columnas, $campos );
+    	  return;
+    }
 
+    public static function agregarEquipo($campos, $idSala)
+    {
+        $tabla = "equipo";
+        $columnas = ["descripcion","marca","nombre"];
+        bd::insert($tabla,$columnas,$campos);
+        $idEquipo = bd::$conn->lastInsertId();
+        $tabla = "equipo_has_sala";
+        $columnas = ["idEquipo","idSala"];
+        $array = [
+         "idEquipo" => $idEquipo ,
+         "idSala" => $idSala
+        ];
+        bd::insert($tabla,$columnas,$array);
+    }
+
+    public static function agregarHorario ($campos, $idSala)
+    {
+        $tabla = "horario";
+        $columnas = ["hora_inicio", "hora_fin","dia"];
+        bd::insert($tabla,$columnas,$campos);
+        $idHorario = bd::$conn->lastInsertId();
+        $tabla = "sala_has_horario";
+        $columnas = ["idSala","idHorario"];
+        $array = [
+            "idSala" => $idSala,
+            "idHorario" => $idHorario
+        ];
+        bd::insert($tabla,$columnas,$array);
+    }
+    public static function agregarInstrumento($campos, $idSala_Ensayo, $idInstrumento_tipo)
+    {
+        $tabla = "instrumento";
+        $columnas = ["nombre", "idInstrumento_tipo"];
+        $campos["idInstrumento_tipo"] = $idInstrumento_tipo;
+        bd::insert($tabla,$columnas,$campos);
+    }
+
+    public static function instancia($filtro = null){
+        $consulta = "SELECT se.idSala_Ensayo id, se.precio, se.grabacion,
+        se.descripcion_grabacion, ec.direccion, ec.nombre
+        FROM sala_ensayo se
+        JOIN entidad_comercial ec ON se.idEntidad_comercial";
+/*
         $valores_filtro = [];
 
         $where = false;
-        if(isset($filtro['texto']) && !empty($filtro['texto'])){
+       if(isset($filtro['texto']) && !empty($filtro['texto'])){
             $where = true;
             $texto =  $filtro['texto'];
             $consulta .= "WHERE se.nombre LIKE '%{$texto}%' OR l.nombre LIKE '%{$texto}%'";
@@ -24,7 +70,7 @@ class SalaEnsayo {
                 $consulta .= "AND ";
             }
             $consulta .= "l.id IN ( " . implode(", ", $filtro['localidad']) . ") ";
-        }
+        }*/
 
         $pdoStatement = Bd::execute($consulta, $valores_filtro);
 

@@ -81,5 +81,5 @@ function getInstrumento(){
 }
 
 echo "Estamos antes de instertar";
-Usuario::quemarInsertar();
+SalaEnsayo::instancia();
 echo "Estamos después de instertar";
