@@ -50,17 +50,18 @@ class SalaEnsayo {
 
     public static function instancia($filtro = null){
         $consulta = "SELECT se.idSala_Ensayo id, se.precio, se.grabacion,
-        se.descripcion_grabacion, ec.direccion, ec.nombre
+        se.descripcion_grabacion, ec.direccion, ec.nombre, l.nombre
         FROM sala_ensayo se
-        JOIN entidad_comercial ec ON se.idEntidad_comercial";
-/*
+        JOIN entidad_comercial ec ON se.idEntidad_comercial
+        JOIN localidad l ON ec.idLocalidad";
+
         $valores_filtro = [];
 
         $where = false;
        if(isset($filtro['texto']) && !empty($filtro['texto'])){
             $where = true;
             $texto =  $filtro['texto'];
-            $consulta .= "WHERE se.nombre LIKE '%{$texto}%' OR l.nombre LIKE '%{$texto}%'";
+            $consulta .= " WHERE ec.nombre LIKE '%{$texto}%' OR l.nombre LIKE '%{$texto}%' ";
         }
         if(isset($filtro['localidad'])){
             if(!$where){
@@ -70,7 +71,18 @@ class SalaEnsayo {
                 $consulta .= "AND ";
             }
             $consulta .= "l.id IN ( " . implode(", ", $filtro['localidad']) . ") ";
-        }*/
+        }
+        if(isset($filtro['grabacion'])){
+            $where = true;
+            $bool = $filtro['grabacion'];
+            $consulta .= " WHERE se.grabacion =  $bool ";
+        }
+
+        if(isset($filtro['precio'])){
+            $where = true;
+            $precio = $filtro['precio'];
+            $consulta .= " WHERE se.precio <=  $precio ";
+        }
 
         $pdoStatement = Bd::execute($consulta, $valores_filtro);
 

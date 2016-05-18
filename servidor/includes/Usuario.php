@@ -151,9 +151,12 @@ class Usuario {
     }
 
     public static function quemarconsulta(){
-        //$ensayos_objs =
-        SalaEnsayo::instancia();
-    //    echo "xxx" .$ensayos_objs;
+        $filtro = [
+            "precio" => 25];
+        $ensayos_objs = SalaEnsayo::instancia($filtro);
+
+        var_dump($ensayos_objs);
+    
 
     }
 
