@@ -1,6 +1,7 @@
 <?php
 class Bar {
 
+
     private $atributos = [];
     private $generoMusical = [];
 
