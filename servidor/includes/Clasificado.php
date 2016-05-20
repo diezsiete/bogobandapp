@@ -12,7 +12,54 @@ class Clasificado {
 
         return ;
     }
-
+public static function instancia2($filtro = null){
+        $consulta = "SELECT c.idClasificado, c.titulo, c.categoria, c.descripcion, c.instrumento, c.nivel,
+                     u.nombre
+                            
+                     FROM clasificado c
+                    
+                     JOIN (
+                        SELECT cg.clasificado_idClasificado as idClasificado, g.nombre
+                        FROM genero g
+                        JOIN clasificado_has_genero cg ON g.idGenero = cg.genero_idGenero
+                     )u ON c.idClasificado = u.idClasificado ";
+        $valores_filtro = [];
+/*
+        $where = false;
+        if(isset($filtro['texto']) && !empty($filtro['texto'])){
+            $where = true;
+            $texto =  $filtro['texto'];
+            $consulta .= "WHERE c.categoria LIKE '%{$texto}%' OR c.titulo LIKE '%{$texto}%'
+                          OR c.descripcion LIKE '%{$texto}%' OR i.nombre LIKE '%{$texto}%'
+                          OR u.nombre LIKE '%{$texto}%' OR gm.nombre LIKE '%{$texto}%'";
+        }
+        if(isset($filtro['generoMusical'])){
+            if(!$where){
+                $consulta .="WHERE ";
+                $where = false;
+            }else{
+                $consulta .= "AND ";
+            }
+            $consulta .= "gm.id IN ( " . implode(", ", $filtro['generoMusical']) . ") ";
+        }
+        if(isset($filtro['categoriaClasificado'])){
+            if(!$where){
+                $consulta .="WHERE ";
+                $where = false;
+            }else{
+                $consulta .= "AND ";
+            }
+            $consulta .= "cc.id IN ('".implode("', '", $filtro['categoriaClasificado'])."') ";
+        }
+        if(isset($filtro['instrumento'])){
+            if(!$where){
+                $consulta .="WHERE ";
+                $where = false;
+            }else{
+                $consulta .= "AND ";
+            }
+            $consulta .= "i.id IN ('".implode("', '", $filtro['instrumento'])."') ";*/
+        }
     public static function instancia($filtro = null){
         $consulta = "SELECT c.id, cc.nombre categoria, c.titulo, c.descripcion, i.nombre as instrumento,
                             inv.nombre as instrumento_nivel, u.nombre usuario, gm.nombre as genero_musical

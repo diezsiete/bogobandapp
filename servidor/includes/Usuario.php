@@ -2,63 +2,23 @@
 
 class Usuario {
 
-    private $atributos = [];
+    private static $columnas = [ "correo", "telefono","celular","password", "username"];
+    private static $tabla = "usuario";
+    private static $parentId = false;
+    protected $atributos = [];
+     
 
-
-    public function __construct($atributos ){
-        foreach($atributos as $nombre => $valor){
-            $this->atributos[$nombre] = $valor;
-        }
+   
+    protected static function agregarGetCampos($campos){
+        return array_intersect($campos, array_flip(static::$columnas));
     }
-
-    public function __get($attr) {
-        $valor = $this->atributos[$attr];
-        if($attr == 'imagen'){
-            $valor = Util::config("base_img_usuario") . $valor;
-        }
-        return $valor;
-    }
-
-    public static function agregarUsuario($camposU, $camposE, $camposEs,  $tipoEntidad, $tipoEspecifico, $idGenero_musical=NULL,$idInstrumento=NULL, $nivel=NULL) {
-      $usuario = "usuario";
-      $columnas = [ "correo", "telefono","celular","password", "username"];
-      Bd::insert($usuario, $columnas, $camposU);
-      $idUsuario = bd::$conn->lastInsertId();
-      $camposE["idUsuario"] = $idUsuario;
-
-      if($tipoEntidad == "comercial"){
-          $tabla = "entidad_comercial";
-          $columnas = [ "direccion", "idLocalidad", "nombre", "idUsuario" ] ;
-          bd::insert($tabla, $columnas, $camposE );
-          $idComercial = bd::$conn->lastInsertId();
-          EntidadComercial::agregarEntidadComercial($tipoEspecifico, $camposEs, $idComercial);
-          if($idGenero_musical)
-          {
-             $tabla = "entidad_comercial_has_genero_musical";
-             $columnas = ["idEntidad_comercial","idGenero_musical"];
-             $array = [
-              "idEntidad_comercial" => $idComercial ,
-              "idGenero_musical" => $idGenero_musical
-             ];
-            bd::insert($tabla, $columnas,$array);
-          }
-
-      }
-      if($tipoEntidad == "musical"){
-        $tabla = "entidad_musical";
-        $columnas = [ "descripcion", "idUsuario" ] ;
-        bd::insert($tabla, $columnas, $camposE);
-
-        $idMusical = bd::$conn->lastInsertId();
-        $tabla = "entidad_musical_has_genero_musical";
-        $columnas = ["idEntidad_musical","idGenero_musical"];
-        $array = [
-          "idEntidad_musical" => $idMusical ,
-          "idGenero_musical" => $idGenero_musical
-         ];
-        bd::insert($tabla, $columnas,$array);
-        echo "id de la entidad musical creado " . $idMusical;
-        EntidadMusical::agregarEntidadMusical($tipoEspecifico, $camposEs, $idMusical,$idInstrumento, $nivel);
+    protected static function agregar($campos) {
+         if(static::$parentId){
+             $campos[static::$parentId] = parent::agregar($campos);
+         }
+          bd::insert(static::$tabla, static::$columnas, static::agregarGetCampos($campos));
+          return bd::$conn->lastInsertId();
+      
       }
 
 
@@ -76,6 +36,20 @@ class Usuario {
 
 
     }
+     public function __construct($atributos ){
+        foreach($atributos as $nombre => $valor){
+            $this->atributos[$nombre] = $valor;
+        }
+    }
+
+    public function __get($attr) {
+        $valor = $this->atributos[$attr];
+        if($attr == 'imagen'){
+            $valor = Util::config("base_img_usuario") . $valor;
+        }
+        return $valor;
+    }
+    /*
     public static function quemarInsertar(){
 
         $camposU = [
@@ -159,7 +133,7 @@ class Usuario {
     
 
     }
-
+*/
 }
 
 ?>

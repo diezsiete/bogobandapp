@@ -1,43 +1,34 @@
 <?php
-class EntidadMusical{
+class EntidadMusical extends Usuario {
+
+    private static  $columnas = ["descripcion", "idUsuario"];
+    private static $tabla = "EntidadMusical";
+    private static $parentId = "idUsuario";
 
     private $atributos = [];
 
-    protected function __construct($atributosUsuario, $atributosEntidad ){
-        //parent::__construct($atributosUsuario);
-        foreach($atributosMusical as $nombre => $valor){
-            $this->atributosMusical[$nombre] = $valor;
-        }
 
+
+    protected function __construct($attr)
+       parent::__construct($attr);
     }
-    public static function agregarEntidadMusical($tipo, $campos, $idEntidad_musical, $idInstrumento, $nivel )
+    
+
+    public static function agregarEntidadMusical($tipo, $campos)
     {
         $campos["idEntidad_musical"] = $idEntidad_musical;
         if($tipo == "banda")
         {
             $tabla = "banda";
-            $columnas = ["nombre","anio", "idEntidad_musical"];
+           
             bd::insert($tabla, $columnas, $campos );
             return;
         }
         if($tipo == "musico")
         {
-            $tabla = "musico";
-            $columnas  = ["nombre","genero","apellido","fecha_nacimiento","anios_exp","influencias", "idEntidad_musical"];
-            bd::insert($tabla, $columnas, $campos );
-            $idMusico = bd::$conn->lastInsertId();
-           if($idInstrumento)
-            {
-                $tabla = "musico_has_instrumento";
-                $columnas = ["idMusico","idInstrumento","nivel"];
-                $array = [
-                "idMusico" => $idMusico ,
-                "idInstrumento" => $idInstrumento,
-                "nivel" => $nivel
-             ];
-            bd::insert($tabla, $columnas,$array);
-            }
-            return ;
+            $campos['idEntidad_musical'] = 
+            $inst = Musico::agregar($campos);
+            return $inst;
         }
     }
     public function __get($attr) {

@@ -2,16 +2,14 @@
 class SalaEnsayo {
 
     private $atributos = [];
-
-    public static function agregarSala($campos, $idSala_Ensayo){
-          $campos["idSala_Ensayo"] = $idSala;
-          $tabla = "sala";
-          $columnas = [ "precio", "grabacion", "idSala_Ensayo" ] ;
-          bd::insert($tabla, $columnas, $campos );
-    	  return;
+     
+    
+    public static function agregarSala($campos){
+         $campos['idSala_Ensayo'] = $this->__get('idSala_Ensayo');
+         inst = Sala::agregar($campos);
+       return $inst; 
     }
-
-    public static function agregarEquipo($campos, $idSala)
+    public static function agregarEquipo($campos)
     {
         $tabla = "equipo";
         $columnas = ["descripcion","marca","nombre"];
@@ -40,12 +38,15 @@ class SalaEnsayo {
         ];
         bd::insert($tabla,$columnas,$array);
     }
-    public static function agregarInstrumento($campos, $idSala_Ensayo, $idInstrumento_tipo)
+    public function agregarInstrumento($campos)
     {
-        $tabla = "instrumento";
-        $columnas = ["nombre", "idInstrumento_tipo"];
-        $campos["idInstrumento_tipo"] = $idInstrumento_tipo;
-        bd::insert($tabla,$columnas,$campos);
+       $inst = Instrumento::agregar($campos);
+       $tabla = "sala_has_instrumento";
+       $campos = ["idInstrumento" => $inst->idInstrumento 
+                   "idSala_Ensayo" => $this->__get('id')];
+       $column = ["idInstrumento", "idSala_Ensayo"];
+       bd::insert($tabla, $column, $campos);
+       return $inst; 
     }
 
     public static function instancia($filtro = null){
@@ -58,11 +59,18 @@ class SalaEnsayo {
         $valores_filtro = [];
 
         $where = false;
+
        if(isset($filtro['texto']) && !empty($filtro['texto'])){
             $where = true;
             $texto =  $filtro['texto'];
             $consulta .= " WHERE ec.nombre LIKE '%{$texto}%' OR l.nombre LIKE '%{$texto}%' ";
         }
+        if(isset($filtro['id'])){
+            $where = true;
+            $idSE = $filtro['id'];
+            $consulta .= " WHERE se.idSala_Ensayo =  {$idSE} ";
+        }
+
         if(isset($filtro['localidad'])){
             if(!$where){
                 $consulta .="WHERE ";
@@ -70,7 +78,7 @@ class SalaEnsayo {
             }else{
                 $consulta .= "AND ";
             }
-            $consulta .= "l.id IN ( " . implode(", ", $filtro['localidad']) . ") ";
+            $consulta .= "l.idLocalidad IN ( " . implode(", ", $filtro['localidad']) . ") ";
         }
         if(isset($filtro['grabacion'])){
             $where = true;
@@ -96,8 +104,8 @@ class SalaEnsayo {
 
 
     }
-
-    protected function __construct($atributos){
+     
+    public function __construct($atributos){
         foreach($atributos as $nombre => $valor)
             $this->atributos[$nombre] = $valor;
     }
@@ -111,6 +119,16 @@ class SalaEnsayo {
         return $valor;
     }
 
+    public function editar($campos){
+       $tabla = "sala_ensayo";
+       $filtro = ["idSala_Ensayo" => $this->__get('id'); 
+       bd::update($tabla, $campos, $filtro)
+
+    }
+    public function getIstrumentos(){}
+    public function editarInstrumento(){
+
+    }
     public function aArreglo(){
         $a = [];
         foreach($this->atributos as $nombre => $valor){
@@ -119,4 +137,5 @@ class SalaEnsayo {
 
         return $a;
     }
+
 }
